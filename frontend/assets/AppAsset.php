@@ -14,14 +14,19 @@ class AppAsset extends AssetBundle
     public $css = [
         //'css/site.css',
         'css/bootstrap.css',
+        'font/css/open-iconic-bootstrap.css',
         'css/jquery-ui.min.css',
         'css/jquery-ui.theme.min.css',
-        'css/custom.css'
+        'DataTables/datatables.css',
+        'css/custom.css',
+        
     ];
     public $js = [
         'js/jquery.min.js',
         'js/jquery-ui.min.js',
-        'js/custom.js'
+        'DataTables/datatables.js',
+        'js/custom.js',
+        
     ];
     public $depends = [
         'yii\web\YiiAsset',
