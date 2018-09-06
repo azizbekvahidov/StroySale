@@ -23,7 +23,8 @@ AppAsset::register($this);
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?= Html::csrfMetaTags() ?>
-        <title><?= Html::encode($this->title) ?></title>
+        <title><?= Html::encode($this->title
+            ) ?></title>
         <?php $this->head() ?>
     </head>
 <body>
@@ -41,7 +42,7 @@ AppAsset::register($this);
                 <h3 class="alert">Stroy Sale</h3>
                 <ul class="nav flex-column">
                     <li class="nav-item"><a href="/provider" class="nav-link active">Поставщики</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Приход товаров</a></li>
+                    <li class="nav-item"><a href="/invoice" class="nav-link">Приход товаров</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Баланс</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Provider4</a></li>
                     <li class="nav-item"><a href="/calc" class="nav-link">Калькуляция</a></li>

@@ -15,6 +15,7 @@ use Yii;
  * @property InvoiceEx[] $invoiceExes
  * @property Category $category
  * @property Measure $measure
+ * @property Struct[] $structs
  */
 class Product extends \yii\db\ActiveRecord
 {
@@ -75,5 +76,17 @@ class Product extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Measure::className(), ['measureId' => 'measureId']);
     }
-    
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStructs()
+    {
+        return $this->hasMany(Struct::className(), ['stuffProdId' => 'productId']);
+    }
+
+    public function getStruct()
+    {
+        return $this->hasMany(Struct::className(), ['stuffProdId' => 'stuffId']);
+    }
 }

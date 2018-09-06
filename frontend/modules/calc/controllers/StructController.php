@@ -5,6 +5,7 @@ namespace app\modules\calc\controllers;
 use Yii;
 use app\models\Product;
 use app\models\ProductSearch;
+use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -13,7 +14,7 @@ use yii\filters\VerbFilter;
 /**
  * ProductController implements the CRUD actions for Product model.
  */
-class StuffController extends Controller
+class StructController extends Controller
 {
     /**
      * @inheritdoc
@@ -36,19 +37,6 @@ class StuffController extends Controller
         return parent::beforeAction($action);
     }
 
-    /**
-     * Lists all Product models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $models = \app\models\Stuff::find();
-        return $this->render('index', [
-            'models' => $models,
-        ]);
-    }
-
-
     public function actionSave()
     {
         $isAjax = false;
@@ -59,18 +47,18 @@ class StuffController extends Controller
 // return 'Запрос принят!';
             }
             //$form_model->load(\Yii::$app->request->post());
-            $model = new \app\models\Stuff();
+            $model = new \app\models\Struct();
             if ($model->load(Yii::$app->request->post(), '')) {
-                $id = Yii::$app->request->post()['stuffId'];
-                $model = \app\models\Stuff::findOne(['stuffId'=>$id]);
+                $id = Yii::$app->request->post()['structId'];
+                $model = \app\models\Struct::findOne(['structId'=>$id]);
 
+                $model->structId = Yii::$app->request->post()['structId'];
                 $model->stuffId = Yii::$app->request->post()['stuffId'];
-                $model->name = Yii::$app->request->post()['name'];
-                $model->measureId = Yii::$app->request->post()['measureId'];
-                $model->salary = Yii::$app->request->post()['salary'];
-                $model->energy = Yii::$app->request->post()['energy'];
+                $model->stuffProdId = Yii::$app->request->post()['stuffProdId'];
+                $model->cnt = Yii::$app->request->post()['cnt'];
+                $model->idType = Yii::$app->request->post()['idType'];
                 $model->save();
-                $models = \app\models\Stuff::find()->all();
+                $models = \app\models\Struct::find()->all();
                 // var_dump($model);
                 if($isAjax)
                 {
@@ -89,24 +77,23 @@ class StuffController extends Controller
         //return $this->render('index', ['model'=> $model]);
     }
 
-
     public function actionNew()
     {
         $isAjax = false;
-        $form_model =  new \app\models\Stuff();
+        $form_model =  new \app\models\Struct();
         if(\Yii::$app->request->isAjax){
             $isAjax = TRUE;// return 'Запрос принят!';
         }
         //$form_model->load(\Yii::$app->request->post());
 
         if ($form_model->load(Yii::$app->request->post(), '')) {
+            $form_model->structId = Yii::$app->request->post()['structId'];
             $form_model->stuffId = Yii::$app->request->post()['stuffId'];
-            $form_model->name = Yii::$app->request->post()['name'];
-            $form_model->measureId = Yii::$app->request->post()['measureId'];
-            $form_model->salary = Yii::$app->request->post()['salary'];
-            $form_model->energy = Yii::$app->request->post()['energy'];
+            $form_model->stuffProdId = Yii::$app->request->post()['stuffProdId'];
+            $form_model->cnt = Yii::$app->request->post()['cnt'];
+            $form_model->idType = Yii::$app->request->post()['idType'];
             $form_model->save();
-            $models = \app\models\Stuff::find();
+            $models = \app\models\Struct::find();
             if($isAjax)
             {
                 \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -120,63 +107,58 @@ class StuffController extends Controller
         return $this->render('index', ['model'=> $form_model]);
     }
 
+    public function actionRefresh()
+    {
+
+        $models = \app\models\Struct::find()->where(['stuffId'=> 12])->all();
+        try {
+            \Yii::$app->response->format=\yii\web\Response::FORMAT_JSON;
+            $arr=ArrayHelper::toArray($models, [
+                \app\models\Struct::class=>[
+                    'structId',
+                    'stuffProdId',
+                    'prodName'=>function ($data) {
+                        return ($data->idType == 0) ? $data->stuffProd->name : $data->stuffStuff->name;
+                    },
+                    'measure'=>function ($data) {
+                        return ($data->idType == 0) ? $data->stuffProd->measure->name : $data->stuffStuff->measure->name;
+                    },
+                    'cnt',
+                    'idType',
+                ],
+            ]);
+        }
+        catch (Exception $ex){
+            echo $ex->getMessage();
+        }
+        return $this->asJson($arr);
+    }
+
     public function actionDelete()
     {
         $id = Yii::$app->request->post()['id'];
 
         try {
-            $rowCnt = \app\models\Stuff::deleteAll('stuffId='.$id);
+            $rowCnt = \app\models\Struct::deleteAll('structId='.$id);
             return $rowCnt;
         }  catch (\yii\db\Exception $e) {
             echo $e->getMessage();
         }
 
     }
-    public function actionRefreshd()
-    {
 
-        $models = \app\models\Stuff::find()->all();
-
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        //$this->redirect("site/login");
-        $arr = ArrayHelper::toArray($models,[
-            \app\models\Stuff::class =>[
-                'stuffId',
-                'name',
-                'salary',
-                'energy',
-                'measureId',
-                'measure'=>function($data){
-                    return $data->measure->name;
-                },
-            ],
-
-        ]);
-        return ['datas' =>$arr];
-    }
-
-    public function actionRefresh()
-    {
-
-        $models = \app\models\Struct::find()->all(Yii::$app->request->post('id'));
-        echo "<pre>";
-        print_r($models);
-        echo "</pre>";
-//
-//        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-//        //$this->redirect("site/login");
-//        $arr = ArrayHelper::toArray($models,[
-//            \app\models\Stuff::class =>[
-//                'stuffId',
-//                'name',
-//                'salary',
-//                'energy',
-//                'measure'=>function($data){
-//                    return $data->measure->name;
-//                },
-//            ],
-//
-//        ]);
-//        return ['datas' =>$arr];
+    public function actionRefreshProdType(){
+        $list = array();
+        try {
+            if (Yii::$app->request->post("val") == "1") {
+                $list=\yii\helpers\ArrayHelper::map(\app\models\Stuff::find()->all(), 'stuffId', 'name');
+            } else {
+                $list=\yii\helpers\ArrayHelper::map(\app\models\Product::find()->all(), 'productId', 'name');
+            }
+        }
+        catch (\yii\db\Exception $e) {
+            echo $e->getMessage();
+        }
+        return $this->asJson($list);
     }
 }

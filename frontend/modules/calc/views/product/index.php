@@ -6,6 +6,8 @@ $("#mainTable").Custom({
     Columns:[
             {"data":'productId'},
             {"data":'name'},
+            {"data":'measureId'},
+            {"data":'categoryId'},
             {"data":'measure'},
             {"data":'category'},
             {
@@ -23,7 +25,26 @@ $("#mainTable").Custom({
             },
 
         ],
-    tableId:"#categoryTable",
+    columnDefs: [
+            {
+                "targets": [ 2 ],
+                "visible": true,
+                "searchable": false
+            },
+            {
+                "targets": [ 4 ],
+                "visible": true,
+                "searchable": false
+            },
+            {
+                "targets": [ 6 ],
+                "visible": true,
+                "sortable": false,
+                "searchable": false
+        
+            },
+            
+        ],
     refreshUrl:"/calc/product/refreshd",
     deleteUrl:"/calc/product/delete",
     saveUrl:"/calc/product/save",
@@ -42,7 +63,7 @@ $product = new \app\models\Product();
 <?php// print_r($models->all()[0]->name) ?>
 <div class="row">
     <div class="col">
-        <form class="mainForm" id="mainForm1" action="/category/save" method="POST">
+        <form class="mainForm" id="mainForm1" action="" method="POST">
             <div class="form-group row">
                 <label for="staticId" class="col-sm-2 col-form-label">ID</label>
                 <div class="col-sm-6">
@@ -50,21 +71,21 @@ $product = new \app\models\Product();
                 </div>
             </div>
             <div class="form-group row">
-                <label for="staticProvider" class="col-sm-2 col-form-label">Наименование</label>
+                <label for="inputProductName" class="col-sm-2 col-form-label">Наименование</label>
                 <div class="col-sm-5">
                     <input type="text"  class="form-control" name="name" id="inputProductName" placeholder="введите наименование">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="staticId" class="col-sm-2 col-form-label">Ед.Изм.</label>
+                <label for="measureId" class="col-sm-2 col-form-label">Ед.Изм.</label>
                 <div class="col-sm-5">
-                    <?=\yii\helpers\Html::dropDownList("measureId",'',\yii\helpers\ArrayHelper::map(\app\models\Measure::find()->all(),'measureId','name'),array('class'=>"form-control"))?>
+                    <?=\yii\helpers\Html::dropDownList("measureId",'',\yii\helpers\ArrayHelper::map(\app\models\Measure::find()->all(),'measureId','name'),array('class'=>"form-control","id"=>"measureId"))?>
                 </div>
             </div>
             <div class="form-group row pull-right">
-                <label for="staticProvider" class="col-sm-2 col-form-label">Категория</label>
+                <label for="categoryId" class="col-sm-2 col-form-label">Категория</label>
                 <div class="col-sm-5">
-                    <?=\yii\helpers\Html::dropDownList("categoryId",'',\yii\helpers\ArrayHelper::map(\app\models\Category::find()->all(),'categoryId','name'),array('class'=>"form-control"))?>
+                    <?=\yii\helpers\Html::dropDownList("categoryId",'',\yii\helpers\ArrayHelper::map(\app\models\Category::find()->all(),'categoryId','name'),array('class'=>"form-control","id"=>"categoryId"))?>
                 </div>
                 <div class="col-sm-2">
                     <button id="btnSave" type="submit" class="btn btn-primary"><span class="oi oi-check"></span> Сохранить</button>
@@ -89,7 +110,9 @@ $product = new \app\models\Product();
         <tr>
             <th scope="col">#</th>
             <th scope="col">Наиенование</th>
+            <th scope="col">#</th>
             <th scope="col">Ед.Изм</th>
+            <th scope="col">#</th>
             <th scope="col">Категория</th>
             <th></th>
         </tr>
@@ -101,7 +124,9 @@ $product = new \app\models\Product();
                 <tr class="tableRow">
                     <td scope="row"><?= $model->productId ?></td>
                     <td><?= $model->name ?></td>
-                    <td><?= $model->measure->name?></td>
+                    <td><?= $model->measureId?></td>
+                    <td><?= $model->category->name?></td>
+                    <td><?= $model->categoryId?></td>
                     <td><?= $model->category->name?></td>
                     <td></td>
                 </tr>

@@ -38,13 +38,13 @@ $this->registerJs($js);
     <div class="col">
         <form class="mainForm" id="mainForm1" action="/measure/save" method="POST">
             <div class="form-group row">
-                <label for="staticId" class="col-sm-2 col-form-label">ID</label>
+                <label for="formID" class="col-sm-2 col-form-label">ID</label>
                 <div class="col-sm-6">
                     <input type="text" readonly class="form-control-plaintext" name="measureId" id="formID" value="0">
                 </div>
             </div>
             <div class="form-group row pull-right">
-                <label for="staticProvider" class="col-sm-2 col-form-label">Наименование категории</label>
+                <label for="inputMeasureName" class="col-sm-2 col-form-label">Наименование категории</label>
                 <div class="col-sm-5">
                     <input type="text"  class="form-control" name="name" id="inputMeasureName" placeholder="введите наименование">
                 </div>

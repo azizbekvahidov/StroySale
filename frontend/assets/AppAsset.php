@@ -26,6 +26,7 @@ class AppAsset extends AssetBundle
         'js/jquery-ui.min.js',
         'DataTables/datatables.js',
         'js/custom.js',
+        'js/bootstrap.js',
         
     ];
     public $depends = [

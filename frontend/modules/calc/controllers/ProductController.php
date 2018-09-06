@@ -141,6 +141,8 @@ class ProductController extends Controller
             \app\models\Product::class =>[
                 'productId',
                 'name',
+                'measureId',
+                'categoryId',
                 'measure'=>function($data){
                     return $data->measure->name;
                 },

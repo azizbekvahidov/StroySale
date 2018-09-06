@@ -1,86 +1,34 @@
 
 <?php
 $js = <<<JS
-$('#btnNew').on('click', function(){
-        $('[name="providerId"]').val('0');
-        $('[name="name"]').val('');
-        $('[name="address"]').val('');
-    });
-    $('#mainForm1').on('submit', function(){
-        var formId = $('#formID').val();
-        var url1 = '/category/save';
-        if(formId == 0)
-        {
-            url1 = '/category/new';
-        
-        }
-        
-        var data = $(this).serialize();
-        $.ajax({
-            url: url1,
-            type: 'POST',
-            data: data,
-            success: function(res){
-            
-            if(formId == 0)
-            {
-                var str = '<tr class="tableRow"><td>'+res.providerId+'</td>'+
-                '<td>'+res.name+'</td>'+
-                '<td>'+res.address+'</td>'
-                    '<td><a href="#" class="btn btn-default" name="deleteRecord" id="delRecord'+res.providerId+'"><span class="oi oi-x"></span></a></td></tr>';
 
-                $('#mainTable >  tbody:last').append(str);
-            }else
+    $("#mainTable").Custom({
+    Columns:[
+            {"data":'providerId'},
+            {"data":'name'},
+            {"data":'address'},
             {
-               var tableRow = $("td").filter(function() {
-                    return $(this).text() == formId;
-                }).closest("tr");
-                
-                $(tableRow).find('td:eq(1)').text(res.name);
-                $(tableRow).find('td:eq(2)').text(res.address);
-                
-            
-            }
-            
-                                
-        
-                
-            },
-            error: function(xhr){
-                console.log(xhr.responseText);
-            }
-        });
-        $('#mainTable').DataTable().ajax.reload();
-        return false; 
-    });    
-        
-    $('[name="deleteRecord"]').on('click', function() {
-        
-        provId = $(this).attr('id');
-        provId= provId.replace('delRecord', '');
-        yesFunc = function () {
-                $.ajax({
-                url: '/provider/delete',
-                type: 'POST',
-                data:{'id':provId},
-                success: function(res){
-                    var tableRow = $("td").filter(function() {
-                        return $(this).text() == provId;
-                    }).closest("tr");
-                    $(tableRow).remove();
-                    
-                    console.log(res+ " record deleted");
-                    
+                "mDataProp": function (source, type, val) {
+                    if (type === 'set') {
+
+                        return;
+                    }
+                    else if (type === 'display') {
+                        return '<a href="#" class="btn btn-default" name="deleteRecord" id="delRecord' + source.providerId + '"><span class="oi oi-x"></span></a>';
+                    }
+
                 },
-                error: function(xhr){
-                    console.log(xhr.responseText);
-                }
-            });
-            $(this).dialog("close");
-        };  
-        $.ConfirmDialog('Удалить запись', yesFunc);
-        
-   });
+                "sDefaultContent": '<a href="#" class="btn btn-default" name="deleteRecord"><span class="oi oi-x"></span></a>'
+            },
+
+        ],
+    tableId:"#providerTable",
+    refreshUrl:"/provider/refreshd",
+    deleteUrl:"/provider/delete",
+    saveUrl:"/provider/save",
+    newUrl:"/provider/new"
+
+});
        
     
         
