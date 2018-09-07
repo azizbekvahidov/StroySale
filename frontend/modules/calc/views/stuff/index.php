@@ -1,4 +1,4 @@
-<?$measure = new \app\models\Measure(); $category = new \app\models\Category()?>
+
 <?php
 $js = <<<JS
 $("#mainTable").Custom({
@@ -227,7 +227,7 @@ function refreshCard(stuffId) {
 JS;
 
 $this->registerJs($js);
-$product = new \app\models\Stuff();
+$product = new \app\modules\calc\models\Stuff();
 ?>
 <h3>Продукция</h3>
 <div id="error"></div>
@@ -262,7 +262,7 @@ $product = new \app\models\Stuff();
             <div class="form-group row ">
                 <label for="measureId" class="col-sm-2 col-form-label">Ед.Изм.</label>
                 <div class="col-sm-5">
-                    <?=\yii\helpers\Html::dropDownList("measureId",'',\yii\helpers\ArrayHelper::map(\app\models\Measure::find()->all(),'measureId','name'),array('class'=>"form-control","id"=>"measureId"))?>
+                    <?=\yii\helpers\Html::dropDownList("measureId",'',\yii\helpers\ArrayHelper::map(\app\modules\calc\models\Measure::find()->all(),'measureId','name'),array('class'=>"form-control","id"=>"measureId"))?>
                 </div>
                 <div class="col-sm-2">
                     <button id="btnSave" type="submit" class="btn btn-primary"><span class="oi oi-check"></span> Сохранить</button>

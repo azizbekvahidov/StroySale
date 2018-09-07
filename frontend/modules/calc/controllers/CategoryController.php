@@ -3,7 +3,7 @@
 namespace app\modules\calc\controllers;
 
 use Yii;
-use app\models\Category;
+use app\modules\calc\models\Category;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -34,7 +34,7 @@ class CategoryController extends Controller
      */
     public function actionIndex()
     {
-        $models = \app\models\Category::find();
+        $models = Category::find();
 
         return $this->render('index', [
             'models' => $models
@@ -57,15 +57,15 @@ class CategoryController extends Controller
 // return 'Запрос принят!';
             }
             //$form_model->load(\Yii::$app->request->post());
-            $model = new \app\models\Category();
+            $model = new Category();
             if ($model->load(Yii::$app->request->post(), '')) {
                 $id = Yii::$app->request->post()['categoryId'];
-                $model = \app\models\Category::findOne(['categoryId'=>$id]);
+                $model = Category::findOne(['categoryId'=>$id]);
 
                 $model->categoryId = Yii::$app->request->post()['categoryId'];
                 $model->name = Yii::$app->request->post()['name'];
                 $model->save();
-                $models = \app\models\Category::find()->all();
+                $models = Category::find()->all();
                 // var_dump($model);
                 if($isAjax)
                 {
@@ -88,7 +88,7 @@ class CategoryController extends Controller
     public function actionNew()
     {
         $isAjax = false;
-        $form_model =  new \app\models\Category();
+        $form_model =  new Category();
         if(\Yii::$app->request->isAjax){
             $isAjax = TRUE;// return 'Запрос принят!';
         }
@@ -98,7 +98,7 @@ class CategoryController extends Controller
             $form_model->categoryId = Yii::$app->request->post()['categoryId'];
             $form_model->name = Yii::$app->request->post()['name'];
             $form_model->save();
-            $models = \app\models\Category::find();
+            $models = Category::find();
             if($isAjax)
             {
                 \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -117,7 +117,7 @@ class CategoryController extends Controller
         $id = Yii::$app->request->post()['id'];
 
         try {
-            $rowCnt = \app\models\Category::deleteAll('categoryId='.$id);
+            $rowCnt = Category::deleteAll('categoryId='.$id);
             return $rowCnt;
         }  catch (\yii\db\Exception $e) {
             echo $e->getMessage();
@@ -128,7 +128,7 @@ class CategoryController extends Controller
     public function actionRefreshd()
     {
 
-        $models = \app\models\Category::find()->all();
+        $models = Category::find()->all();
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         //$this->redirect("site/login");

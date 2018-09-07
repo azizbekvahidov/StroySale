@@ -2,9 +2,8 @@
 
 namespace app\modules\calc\controllers;
 
+use app\modules\calc\models\Stuff;
 use Yii;
-use app\models\Product;
-use app\models\ProductSearch;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -42,7 +41,7 @@ class StuffController extends Controller
      */
     public function actionIndex()
     {
-        $models = \app\models\Stuff::find();
+        $models = Stuff::find();
         return $this->render('index', [
             'models' => $models,
         ]);
@@ -59,10 +58,10 @@ class StuffController extends Controller
 // return 'Запрос принят!';
             }
             //$form_model->load(\Yii::$app->request->post());
-            $model = new \app\models\Stuff();
+            $model = new Stuff();
             if ($model->load(Yii::$app->request->post(), '')) {
                 $id = Yii::$app->request->post()['stuffId'];
-                $model = \app\models\Stuff::findOne(['stuffId'=>$id]);
+                $model = Stuff::findOne(['stuffId'=>$id]);
 
                 $model->stuffId = Yii::$app->request->post()['stuffId'];
                 $model->name = Yii::$app->request->post()['name'];
@@ -70,7 +69,7 @@ class StuffController extends Controller
                 $model->salary = Yii::$app->request->post()['salary'];
                 $model->energy = Yii::$app->request->post()['energy'];
                 $model->save();
-                $models = \app\models\Stuff::find()->all();
+                $models = Stuff::find()->all();
                 // var_dump($model);
                 if($isAjax)
                 {
@@ -93,7 +92,7 @@ class StuffController extends Controller
     public function actionNew()
     {
         $isAjax = false;
-        $form_model =  new \app\models\Stuff();
+        $form_model =  new Stuff();
         if(\Yii::$app->request->isAjax){
             $isAjax = TRUE;// return 'Запрос принят!';
         }
@@ -106,7 +105,7 @@ class StuffController extends Controller
             $form_model->salary = Yii::$app->request->post()['salary'];
             $form_model->energy = Yii::$app->request->post()['energy'];
             $form_model->save();
-            $models = \app\models\Stuff::find();
+            $models = Stuff::find();
             if($isAjax)
             {
                 \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -125,7 +124,7 @@ class StuffController extends Controller
         $id = Yii::$app->request->post()['id'];
 
         try {
-            $rowCnt = \app\models\Stuff::deleteAll('stuffId='.$id);
+            $rowCnt = Stuff::deleteAll('stuffId='.$id);
             return $rowCnt;
         }  catch (\yii\db\Exception $e) {
             echo $e->getMessage();
@@ -135,12 +134,12 @@ class StuffController extends Controller
     public function actionRefreshd()
     {
 
-        $models = \app\models\Stuff::find()->all();
+        $models = Stuff::find()->all();
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         //$this->redirect("site/login");
         $arr = ArrayHelper::toArray($models,[
-            \app\models\Stuff::class =>[
+            Stuff::class =>[
                 'stuffId',
                 'name',
                 'salary',
@@ -166,7 +165,7 @@ class StuffController extends Controller
 //        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 //        //$this->redirect("site/login");
 //        $arr = ArrayHelper::toArray($models,[
-//            \app\models\Stuff::class =>[
+//            Stuff::class =>[
 //                'stuffId',
 //                'name',
 //                'salary',

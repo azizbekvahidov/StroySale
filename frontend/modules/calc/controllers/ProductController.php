@@ -2,9 +2,8 @@
 
 namespace app\modules\calc\controllers;
 
+use app\modules\calc\models\Product;
 use Yii;
-use app\models\Product;
-use app\models\ProductSearch;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -42,7 +41,7 @@ class ProductController extends Controller
      */
     public function actionIndex()
     {
-        $models = \app\models\Product::find();
+        $models = Product::find();
         return $this->render('index', [
             'models' => $models,
         ]);
@@ -59,17 +58,17 @@ class ProductController extends Controller
 // return 'Запрос принят!';
             }
             //$form_model->load(\Yii::$app->request->post());
-            $model = new \app\models\Product();
+            $model = new Product();
             if ($model->load(Yii::$app->request->post(), '')) {
                 $id = Yii::$app->request->post()['productId'];
-                $model = \app\models\Product::findOne(['productId'=>$id]);
+                $model = Product::findOne(['productId'=>$id]);
 
                 $model->productId = Yii::$app->request->post()['productId'];
                 $model->name = Yii::$app->request->post()['name'];
                 $model->measureId = Yii::$app->request->post()['measureId'];
                 $model->categoryId = Yii::$app->request->post()['categoryId'];
                 $model->save();
-                $models = \app\models\Product::find()->all();
+                $models = Product::find()->all();
                 // var_dump($model);
                 if($isAjax)
                 {
@@ -92,7 +91,7 @@ class ProductController extends Controller
     public function actionNew()
     {
         $isAjax = false;
-        $form_model =  new \app\models\Product();
+        $form_model =  new Product();
         if(\Yii::$app->request->isAjax){
             $isAjax = TRUE;// return 'Запрос принят!';
         }
@@ -104,7 +103,7 @@ class ProductController extends Controller
             $form_model->measureId = Yii::$app->request->post()['measureId'];
             $form_model->categoryId = Yii::$app->request->post()['categoryId'];
             $form_model->save();
-            $models = \app\models\Product::find();
+            $models = Product::find();
             if($isAjax)
             {
                 \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -123,7 +122,7 @@ class ProductController extends Controller
         $id = Yii::$app->request->post()['id'];
 
         try {
-            $rowCnt = \app\models\Product::deleteAll('productId='.$id);
+            $rowCnt = Product::deleteAll('productId='.$id);
             return $rowCnt;
         }  catch (\yii\db\Exception $e) {
             echo $e->getMessage();
@@ -133,12 +132,12 @@ class ProductController extends Controller
     public function actionRefreshd()
     {
 
-        $models = \app\models\Product::find()->all();
+        $models = Product::find()->all();
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         //$this->redirect("site/login");
         $arr = ArrayHelper::toArray($models,[
-            \app\models\Product::class =>[
+            Product::class =>[
                 'productId',
                 'name',
                 'measureId',

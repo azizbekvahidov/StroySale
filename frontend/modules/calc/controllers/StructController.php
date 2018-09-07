@@ -2,9 +2,10 @@
 
 namespace app\modules\calc\controllers;
 
+use app\modules\calc\models\Product;
+use app\modules\calc\models\Struct;
+use app\modules\calc\models\Stuff;
 use Yii;
-use app\models\Product;
-use app\models\ProductSearch;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -47,10 +48,10 @@ class StructController extends Controller
 // return 'Запрос принят!';
             }
             //$form_model->load(\Yii::$app->request->post());
-            $model = new \app\models\Struct();
+            $model = new Struct();
             if ($model->load(Yii::$app->request->post(), '')) {
                 $id = Yii::$app->request->post()['structId'];
-                $model = \app\models\Struct::findOne(['structId'=>$id]);
+                $model = Struct::findOne(['structId'=>$id]);
 
                 $model->structId = Yii::$app->request->post()['structId'];
                 $model->stuffId = Yii::$app->request->post()['stuffId'];
@@ -58,7 +59,7 @@ class StructController extends Controller
                 $model->cnt = Yii::$app->request->post()['cnt'];
                 $model->idType = Yii::$app->request->post()['idType'];
                 $model->save();
-                $models = \app\models\Struct::find()->all();
+                $models = Struct::find()->all();
                 // var_dump($model);
                 if($isAjax)
                 {
@@ -80,7 +81,7 @@ class StructController extends Controller
     public function actionNew()
     {
         $isAjax = false;
-        $form_model =  new \app\models\Struct();
+        $form_model =  new Struct();
         if(\Yii::$app->request->isAjax){
             $isAjax = TRUE;// return 'Запрос принят!';
         }
@@ -93,7 +94,7 @@ class StructController extends Controller
             $form_model->cnt = Yii::$app->request->post()['cnt'];
             $form_model->idType = Yii::$app->request->post()['idType'];
             $form_model->save();
-            $models = \app\models\Struct::find();
+            $models = Struct::find();
             if($isAjax)
             {
                 \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -110,11 +111,11 @@ class StructController extends Controller
     public function actionRefresh()
     {
 
-        $models = \app\models\Struct::find()->where(['stuffId'=> 12])->all();
+        $models = Struct::find()->where(['stuffId'=> 12])->all();
         try {
             \Yii::$app->response->format=\yii\web\Response::FORMAT_JSON;
             $arr=ArrayHelper::toArray($models, [
-                \app\models\Struct::class=>[
+                Struct::class=>[
                     'structId',
                     'stuffProdId',
                     'prodName'=>function ($data) {
@@ -139,7 +140,7 @@ class StructController extends Controller
         $id = Yii::$app->request->post()['id'];
 
         try {
-            $rowCnt = \app\models\Struct::deleteAll('structId='.$id);
+            $rowCnt = Struct::deleteAll('structId='.$id);
             return $rowCnt;
         }  catch (\yii\db\Exception $e) {
             echo $e->getMessage();
@@ -151,9 +152,9 @@ class StructController extends Controller
         $list = array();
         try {
             if (Yii::$app->request->post("val") == "1") {
-                $list=\yii\helpers\ArrayHelper::map(\app\models\Stuff::find()->all(), 'stuffId', 'name');
+                $list=\yii\helpers\ArrayHelper::map(Stuff::find()->all(), 'stuffId', 'name');
             } else {
-                $list=\yii\helpers\ArrayHelper::map(\app\models\Product::find()->all(), 'productId', 'name');
+                $list=\yii\helpers\ArrayHelper::map(Product::find()->all(), 'productId', 'name');
             }
         }
         catch (\yii\db\Exception $e) {

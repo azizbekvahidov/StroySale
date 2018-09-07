@@ -1,4 +1,4 @@
-<?$measure = new \app\models\Measure(); $category = new \app\models\Category()?>
+<?$measure = new \app\modules\calc\models\Measure(); $category = new \app\modules\calc\models\Category()?>
 <?php
 $js = <<<JS
 
@@ -56,7 +56,7 @@ $("#mainTable").Custom({
 JS;
 
 $this->registerJs($js);
-$product = new \app\models\Product();
+$product = new \app\modules\calc\models\Product();
 ?>
 <h3>Продукты</h3>
 <div id="error"></div>
@@ -79,13 +79,13 @@ $product = new \app\models\Product();
             <div class="form-group row">
                 <label for="measureId" class="col-sm-2 col-form-label">Ед.Изм.</label>
                 <div class="col-sm-5">
-                    <?=\yii\helpers\Html::dropDownList("measureId",'',\yii\helpers\ArrayHelper::map(\app\models\Measure::find()->all(),'measureId','name'),array('class'=>"form-control","id"=>"measureId"))?>
+                    <?=\yii\helpers\Html::dropDownList("measureId",'',\yii\helpers\ArrayHelper::map($measure::find()->all(),'measureId','name'),array('class'=>"form-control","id"=>"measureId"))?>
                 </div>
             </div>
             <div class="form-group row pull-right">
                 <label for="categoryId" class="col-sm-2 col-form-label">Категория</label>
                 <div class="col-sm-5">
-                    <?=\yii\helpers\Html::dropDownList("categoryId",'',\yii\helpers\ArrayHelper::map(\app\models\Category::find()->all(),'categoryId','name'),array('class'=>"form-control","id"=>"categoryId"))?>
+                    <?=\yii\helpers\Html::dropDownList("categoryId",'',\yii\helpers\ArrayHelper::map($category::find()->all(),'categoryId','name'),array('class'=>"form-control","id"=>"categoryId"))?>
                 </div>
                 <div class="col-sm-2">
                     <button id="btnSave" type="submit" class="btn btn-primary"><span class="oi oi-check"></span> Сохранить</button>

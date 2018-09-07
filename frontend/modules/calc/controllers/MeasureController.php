@@ -3,8 +3,7 @@
 namespace app\modules\calc\controllers;
 
 use Yii;
-use app\models\Measure;
-use app\models\ProductSearch;
+use app\modules\calc\models\Measure;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -41,7 +40,7 @@ class MeasureController extends Controller
      */
     public function actionIndex()
     {
-        $models = \app\models\Measure::find();
+        $models = Measure::find();
         return $this->render('index', [
             'models' => $models,
         ]);
@@ -58,15 +57,15 @@ class MeasureController extends Controller
 // return 'Запрос принят!';
             }
             //$form_model->load(\Yii::$app->request->post());
-            $model = new \app\models\Measure();
+            $model = new Measure();
             if ($model->load(Yii::$app->request->post(), '')) {
                 $id = Yii::$app->request->post()['measureId'];
-                $model = \app\models\Measure::findOne(['measureId'=>$id]);
+                $model = Measure::findOne(['measureId'=>$id]);
 
                 $model->measureId = Yii::$app->request->post()['measureId'];
                 $model->name = Yii::$app->request->post()['name'];
                 $model->save();
-                $models = \app\models\Measure::find()->all();
+                $models = Measure::find()->all();
                 // var_dump($model);
                 if($isAjax)
                 {
@@ -89,7 +88,7 @@ class MeasureController extends Controller
     public function actionNew()
     {
         $isAjax = false;
-        $form_model =  new \app\models\Measure();
+        $form_model =  new Measure();
         if(\Yii::$app->request->isAjax){
             $isAjax = TRUE;// return 'Запрос принят!';
         }
@@ -99,7 +98,7 @@ class MeasureController extends Controller
             $form_model->measureId = Yii::$app->request->post()['measureId'];
             $form_model->name = Yii::$app->request->post()['name'];
             $form_model->save();
-            $models = \app\models\Measure::find();
+            $models = Measure::find();
             if($isAjax)
             {
                 \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -117,7 +116,7 @@ class MeasureController extends Controller
         $id = Yii::$app->request->post()['id'];
 
         try {
-            $rowCnt = \app\models\Measure::deleteAll('measureId='.$id);
+            $rowCnt = Measure::deleteAll('measureId='.$id);
             return $rowCnt;
         }  catch (\yii\db\Exception $e) {
             echo $e->getMessage();
@@ -127,7 +126,7 @@ class MeasureController extends Controller
     public function actionRefreshd()
     {
 
-        $models = \app\models\Measure::find()->all();
+        $models = Measure::find()->all();
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         //$this->redirect("site/login");
